@@ -12,8 +12,6 @@
 
 A LimitRange can restrict resource consumption for Pods in a namespace, and assign default computing resource if no resource requirements have been defined. You will practice the effects of a LimitRange on the creation of a Pod in different scenarios.
 
-> [!NOTE]
-> If you do not already have a cluster, you can create one by using minikube or you can use the O'Reilly interactive lab ["Creating a Pod Conforming with LimitRange in a Namespace"](https://learning.oreilly.com/scenarios/creating-a-pod/9781098164201/).
 
 1. Inspect the YAML manifest definition in the file [`setup.yaml`](./setup.yaml).
 2. Create the objects from the YAML manifest file.

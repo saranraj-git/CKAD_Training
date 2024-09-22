@@ -12,8 +12,6 @@
 
 In this exercise, you will practice your troubleshooting skills by inspecting a misconfigured Pod.
 
-> [!NOTE]
-> If you do not already have a cluster, you can create one by using minikube or you can use the O'Reilly interactive lab ["Troubleshooting a Pod"](https://learning.oreilly.com/scenarios/troubleshooting-a-pod/9781098164140/).
 
 1. Create a new Pod from the YAML manifest in the file [`pod.yaml`](./pod.yaml).
 2. Check the Pod's status. Do you see any issue?
