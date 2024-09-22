@@ -99,7 +99,7 @@ spec:
     - wget
     - "-O"
     - "/usr/shared/app/config.json"
-    - https://raw.githubusercontent.com/bmuschko/ckad-crash-course/master/exercises/07-init-container/app/config/config.json
+    - https://raw.githubusercontent.com/saranraj-git/CKAD_Training/refs/heads/master/1-Application_Design_and_Build/07-init-container/app/config/config.json
     volumeMounts:
     - name: configdir
       mountPath: "/usr/shared/app"
