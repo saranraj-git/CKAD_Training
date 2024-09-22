@@ -1,0 +1,62 @@
+======== Install Docker engine ======== 
+
+Step 1: Docker Repository
+First, let’s enable the docker repository:
+
+sudo dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+
+
+Step 2: Installing Docker
+
+sudo dnf install docker-ce --nobest -y
+sudo usermod -aG docker $USER && newgrp docker
+
+Step 3: Start Docker
+
+sudo systemctl start docker
+sudo systemctl enable docker
+sudo systemctl status docker
+
+
+======== Install kubectl ======== 
+
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+
+chmod 755 kubectl
+
+sudo mv kubectl /bin/
+
+
+======== Install Minikube ======== 
+
+curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+sudo install minikube-linux-amd64 /usr/local/bin/minikube && rm minikube-linux-amd64
+
+
+minikube config set driver docker
+minikube start --driver=docker
+
+minikube status
+docker ps -a
+
+kubectl get pod -A
+
+kubectl create deployment hello-minikube --image=kicbase/echo-server:1.0
+kubectl expose deployment hello-minikube --type=NodePort --port=8080
+
+kubectl get services hello-minikube
+
+minikube service hello-minikube
+
+check the url for hello minikube page
+
+
+minikube pause
+minikube unpause
+minikube stop
+minikube delete
+
+docker ps -a
+
+
+
