@@ -1,60 +1,56 @@
 # Solution
 
-Create the intial YAML with the following command.
-
-```
-$ kubectl run hello --image=bmuschko/nodejs-hello-world:1.0.0 --port=3000 -o yaml --dry-run=client --restart=Never > pod.yaml
-```
-
-Edit the YAML file and add the probes.
+Create the Liveness_cmd.YAML file and add the probes.
 
 ```yaml
 apiVersion: v1
 kind: Pod
 metadata:
-  creationTimestamp: null
   labels:
-    run: hello
-  name: hello
+    test: liveness
+  name: liveness-exec
 spec:
   containers:
-  - image: bmuschko/nodejs-hello-world:1.0.0
-    name: hello
-    ports:
-    - name: nodejs-port
-      containerPort: 3000
-    readinessProbe:
-      httpGet:
-        path: /
-        port: nodejs-port
-      initialDelaySeconds: 2
+  - name: liveness
+    image: registry.k8s.io/busybox
+    args:
+    - /bin/sh
+    - -c
+    - touch /tmp/healthy; sleep 30; rm -f /tmp/healthy; sleep 600
     livenessProbe:
-      httpGet:
-        path: /
-        port: nodejs-port
+      exec:
+        command:
+        - cat
+        - /tmp/healthy
       initialDelaySeconds: 5
-      periodSeconds: 8
-    resources: {}
-  dnsPolicy: ClusterFirst
-  restartPolicy: Never
-status: {}
+      periodSeconds: 5
 ```
 
-Create the Pod from the YAML file, shell into the Pod as soon as it is running and execute the `curl` command.
+
+Create the initial YAML with the following command.
 
 ```
-$ kubectl apply -f pod.yaml
-pod/hello created
-
-$ kubectl exec hello -it -- /bin/sh
-# curl localhost:3000
-Hello World
-# exit
+kubectl apply -f Liveness_cmd.yaml
 ```
 
-Rendering the logs of the Pod reveals additional log output.
+
+
+After 35 seconds, view the Pod events again:
 
 ```
-$ kubectl logs pod/hello
-Magic happens on port 3000
+kubectl describe pod liveness-exec
+```
+
+At the bottom of the output, there are messages indicating that the liveness probes have failed, and the failed containers have been killed and recreated.
+
+```
+Type     Reason     Age                From               Message
+----     ------     ----               ----               -------
+Normal   Scheduled  57s                default-scheduler  Successfully assigned default/liveness-exec to node01
+Normal   Pulling    55s                kubelet, node01    Pulling image "registry.k8s.io/busybox"
+Normal   Pulled     53s                kubelet, node01    Successfully pulled image "registry.k8s.io/busybox"
+Normal   Created    53s                kubelet, node01    Created container liveness
+Normal   Started    53s                kubelet, node01    Started container liveness
+Warning  Unhealthy  10s (x3 over 20s)  kubelet, node01    Liveness probe failed: cat: can't open '/tmp/healthy': No such file or directory
+Normal   Killing    10s                kubelet, node01    Container liveness failed liveness probe, will be restarted
 ```

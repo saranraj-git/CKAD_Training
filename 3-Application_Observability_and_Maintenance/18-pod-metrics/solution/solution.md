@@ -1,5 +1,11 @@
 # Solution
 
+In order to collect the metrics of pods, we need to enable the metrics server
+
+```
+minikube addons enable metrics-server
+```
+
 Create the namespace with the imperative command.
 
 ```
